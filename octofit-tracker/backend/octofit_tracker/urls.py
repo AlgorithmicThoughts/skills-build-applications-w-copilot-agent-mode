@@ -15,8 +15,17 @@ Including another URLconf
 """
 import os
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.http import JsonResponse
+from rest_framework import routers
+from .views import UserViewSet, TeamViewSet, ActivityViewSet, LeaderboardViewSet, WorkoutViewSet
+
+router = routers.DefaultRouter()
+router.register(r'users', UserViewSet)
+router.register(r'teams', TeamViewSet)
+router.register(r'activities', ActivityViewSet)
+router.register(r'leaderboard', LeaderboardViewSet)
+router.register(r'workouts', WorkoutViewSet)
 
 def api_root(request):
     codespace_name = os.environ.get('CODESPACE_NAME', '')
@@ -31,5 +40,6 @@ def api_root(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include(router.urls)),
     path('', api_root, name='api_root'),
 ]
